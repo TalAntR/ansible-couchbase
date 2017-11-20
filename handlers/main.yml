@@ -1,0 +1,4 @@
+---
+
+- name: restart couchbase-server
+  service: name={{ couchbase.server.daemon }} state=restarted

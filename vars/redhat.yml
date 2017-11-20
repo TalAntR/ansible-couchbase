@@ -1,0 +1,21 @@
+---
+
+couchbase:
+
+  # Source for binary files
+  providers: &providers
+    # Configuration settings and packages for RHEL-based Linux by default
+    pkg:
+      # Declaration of YUM repositories which must be setup before installation
+      repositories: {}
+
+      # Yum packages which are installed on prepare phase
+      prerequisites:
+        - http://packages.couchbase.com/releases/couchbase-release/couchbase-release-1.0-0-x86_64.rpm
+
+      packages:
+        - "couchbase-server-community-{{ couchbase.server.version }}"
+
+  server:
+    providers:
+      <<: *providers

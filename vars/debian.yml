@@ -1,0 +1,27 @@
+---
+
+couchbase:
+
+  # Define settings for APT repository
+  providers: &providers
+    # Configuration settings and packages for Debian-based Linux
+    pkg:
+      repositories:
+        Couchbase-community:
+          url: "[ arch=amd64 ] http://packages.couchbase.com/releases/couchbase-server/community/deb/  {{ ansible_lsb.codename }} {{ ansible_lsb.codename }}/main"
+          keys: [ "https://raw.githubusercontent.com/couchbase/build/master/scripts/release/linux_repo/couchbase-release/GPG-KEY-COUCHBASE-1.0" ]
+        Couchbase-enterprise:
+          url: "[ arch=amd64 ] http://packages.couchbase.com/releases/couchbase-server/enterprise/deb/  {{ ansible_lsb.codename }} {{ ansible_lsb.codename }}/main"
+          keys: [ "https://raw.githubusercontent.com/couchbase/build/master/scripts/release/linux_repo/couchbase-release/GPG-KEY-COUCHBASE-1.0" ]
+
+      # Apt packages which are installed on prepare phase
+      prerequisites:
+        - ca-certificates
+        - python-requests
+
+      packages:
+        - "couchbase-server-community={{ couchbase.server.version }}"
+
+  server:
+    providers:
+      <<: *providers

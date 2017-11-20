@@ -1,0 +1,4 @@
+---
+
+- name: get service status
+  service: name={{ collectd.service.daemon }} state=started

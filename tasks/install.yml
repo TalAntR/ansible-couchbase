@@ -1,0 +1,41 @@
+---
+
+- name: install packages
+  package: name={{ item }}
+           update_cache=yes
+           state=present
+  with_items: "{{ svc.providers.pkg.packages | select | list }}"
+  become: true
+
+- name: enable autostart on boot
+  service: name={{ svc.daemon }} enabled=yes
+  become: true
+
+  #TODO: Update static configuration must be here
+- name: update cluster name
+  debug: msg="{{ couchbase.cluster.name }} - Multiple instances are not supported now"
+  #when: couchbase.cluster | len > 0
+
+#- name: init couchbase cluster
+#  command: couchbase-cli cluster-init "--cluster-{{ couchbase.cluster.options.items() | map('join', '=') | join(' --cluster-') }}"
+#  args:
+#    chdir: "{{ svc.home }}"
+#  environment:
+#    PATH: "{{ svc.home }}/bin:{{ ansible_env.PATH }}"
+#  when: couchbase.cluster.name | default("") != ""
+#  run_once: true
+
+
+#- name: create buckets
+#  command: >
+#    couchbase-cli bucket-create -c 127.0.0.1:{{ couchbase.cluster.options.port  }} 
+#                  -u {{ couchbase.cluster.options.username  }} -p {{ couchbase.cluster.options.password  }}
+#                  --bucket={{ bucket.key }} --{{ bucket.value.items() | map('join', '=') | join(' --') }}
+#  with_dict: "{{ couchbase.cluster.buckets }}"
+#  environment:
+#    PATH: "{{ svc.home }}/bin:{{ ansible_env.PATH }}"
+#    CB_REST_USERNAME: "{{ couchbase.cluster.options.username  }}"
+#    CB_REST_PASSWORD: "{{ couchbase.cluster.options.password  }}"
+#  loop_control:
+#    loop_var: bucket
+#  run_once: true

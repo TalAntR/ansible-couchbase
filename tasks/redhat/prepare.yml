@@ -1,0 +1,13 @@
+---
+
+- name: add yum repositories
+  yum_repository: name="{{ item.key }}"
+                  description="{{ item.value.description }}"
+                  file="{{ item.key }}"
+                  baseurl="{{ item.value.url }}"
+                  gpgkey="{{ item.value['keys'] | join(' ') }}"
+                  gpgcheck="{{ item.value.gpgcheck | default('yes') }}"
+                  enabled="{{ item.value.enabled | default('yes') }}"
+  with_dict: "{{ svc.providers.pkg.repositories | default({}) }}"
+  no_log: yes
+  become: true

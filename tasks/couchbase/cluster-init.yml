@@ -1,0 +1,12 @@
+---
+
+  #TODO: Update static configuration must be here
+- name: update cluster name
+  debug: msg="{{ cluster.key }} - Multiple instances are not supported now"
+
+- name: init couchbase cluster
+  command: couchbase-cli cluster-init "--cluster-{{ options.items() | map('join', '=') | join(' --cluster-') }}"
+  args:
+    chdir: "{{ svc.home }}"
+  environment:
+    PATH: "{{ svc.home }}/bin:{{ ansible_env.PATH }}"

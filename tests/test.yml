@@ -1,0 +1,32 @@
+---
+
+- hosts: all
+  gather_facts: yes
+  connection: docker
+  remote_user: root
+  roles:
+    - role: couchbase
+      couchbase:
+        server: {}
+
+        cluster:
+          name: cb-test
+
+          # Collection of buckets and its settings
+          buckets:
+            visa:
+              bucket-replica: 1
+              bucket-type: couchbase
+              bucket-eviction-policy: value-only
+              enable-flush: 1
+
+          # Server groups for Rack Awareness feature (Enterprise Edition)
+          groups: []
+
+          options:
+            username: admin
+            password: "admin0"
+            port: 8091
+            ramsize: 8192
+            index-ramsize: 1024
+            services: data,index,query

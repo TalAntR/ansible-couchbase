@@ -1,0 +1,50 @@
+versions:
+  couchbase: "{{ version | default('5.0.0') }}"
+
+couchbase:
+
+  server:
+
+    # Name of the managed service
+    name: "couchbase-server"
+
+    # Version of the collectd daemon
+    version: "{{ versions.couchbase }}"
+
+    # Base/working directory for collectd daemon
+    home: "/opt/couchbase"
+
+    # Location for configuration files
+    conf: "/opt/couchbase/etc/couchdb/local.d"
+
+    # Name of SysV script or Systemd unit
+    daemon: "couchbase-server"
+
+    # Processes and files owner
+    owner: "couchbase"
+
+    # Configuration settings for couchbase server
+    # in etc/couchbase/static_config
+    options: {}
+
+  # Description of Couchbase clusters which must be initialized.
+  # See https://developer.couchbase.com/documentation/server/4.5/cli/cbcli/cluster-init.html
+  # Example
+  #
+  #  name: <short-name>
+  #
+  #  # Collection of buckets and its settings
+  #  buckets: {}
+  #
+  #  # Server groups for Rack Awareness feature (Enterprise Edition)
+  #  groups: []
+  #
+  #  options:
+  #    username: admin
+  #    password: "admin"
+  #    port: 10100
+  #    ramsize: 8192
+  #    index-ramsize: 1024
+  #    services: data,index,query
+  cluster: {}
+

@@ -1,0 +1,34 @@
+---
+
+- name: init node
+  couchbase:
+    target: node
+    name: "127.0.0.1"
+    options: "{{ couchbase.server.options }}"
+    url: "http://127.0.0.1:{{ svc.port | default(couchbase.cluster.options.port) }}"
+    username: "{{ svc.username | default(couchbase.cluster.options.username) }}"
+    password: "{{ svc.password | default(couchbase.cluster.options.password) }}"
+
+- name: setup cluster
+  couchbase:
+    target: cluster
+    name: "default"
+    options: "{{ couchbase.cluster.options }}"
+    url: "http://127.0.0.1:{{ couchbase.cluster.options.port }}"
+    username: "{{ couchbase.cluster.options.username }}"
+    password: "{{ couchbase.cluster.options.password }}"
+  run_once: true
+#  no_log: yes
+
+
+- name: add bucket
+  couchbase:
+    target: bucket
+    name: "{{ item.key }}"
+    options: "{{ item.value }}"
+    url: "http://127.0.0.1:{{ couchbase.cluster.options.port }}"
+    username: "{{ couchbase.cluster.options.username }}"
+    password: "{{ couchbase.cluster.options.password }}"
+  with_dict: "{{ couchbase.cluster.buckets }}"
+  run_once: true
+#  no_log: yes
